@@ -1,11 +1,12 @@
-import { Component, forwardRef, Input, input, signal} from '@angular/core';
-import { inputType } from '../../models/input.model';
+import { inputType, StrengthKey } from './../../models/input.model';
+import { Component, computed, forwardRef, Input, input, signal} from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'tf-input',
-  imports: [FormsModule],
+  imports: [FormsModule, TranslatePipe],
   templateUrl: './tf-input.html',
   styleUrl: './tf-input.css',
   providers:[
@@ -59,6 +60,9 @@ export class TFInput {
 
   onInputChange(event:Event){
     this.value.set(event)
+    if(this.type() == 'password' && this.showPassword()){
+      this.password.set(event)
+    }
     this.onChange(this.value())
     this.onTouched();
   }
@@ -66,4 +70,56 @@ export class TFInput {
     const checked = (event.target as HTMLInputElement).checked
     this.onChange(checked)
   }
+  showPassword = signal<boolean>(false);
+  inputType = computed(()=> (this.showPassword() ? 'text' : 'password'))
+
+  toggleIcon = computed(() =>
+    this.showPassword() ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye',
+  );
+
+  togglePassword(input: any) {
+    this.showPassword.update((v) => !v);
+    input.type = this.inputType();
+  }
+
+  showMeter = signal<boolean>(false);
+   password = signal<any>('');
+
+  score = computed(() => {
+    const val = this.password();
+    let s = 0;
+    if (!val) return 0;
+    if (val.length >= 8) s++;
+    if (/[A-Za-z]/.test(val)) s++;
+    if (/[0-9]/.test(val)) s++;
+    if (/[^A-Za-z0-9]/.test(val)) s++;
+
+    return s;
+  });
+
+  strengthKey = computed<StrengthKey>(() => {
+    const s = this.score();
+    if (!this.password()) return 'empty';
+    if (s <= 1) return 'weak';
+    if (s === 2) return 'fair';
+    if (s === 3) return 'good';
+    return 'strong';
+  });
+
+  strengthLabel = computed(() => {
+    switch (this.strengthKey()) {
+      case 'weak':
+        return 'Weak';
+      case 'fair':
+        return 'Fair';
+      case 'good':
+        return 'Good';
+      case 'strong':
+        return 'Strong';
+      default:
+        return 'Too short';
+    }
+  });
+
+  displayMeter = computed(() => !!this.password());
 }
