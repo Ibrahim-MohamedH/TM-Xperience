@@ -1,3 +1,12 @@
-<h1 class="text-3xl font-bold underline text-green-600">
-  {{"task" | translate}}
-</h1>
+<form [formGroup]="form" (submit)="onSubmit()">
+  <tf-input
+label="email address"
+formControlName="email"
+[icon]="appService.getIcon('envelopeSoild')"></tf-input>
+
+<tf-input
+type="password"
+label="password"
+formControlName="password"></tf-input>
+<button>submit</button>
+</form>

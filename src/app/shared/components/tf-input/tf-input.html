@@ -1,0 +1,90 @@
+<div class="flex flex-col gap-1.5">
+  @if (showLable() && labelPosition() == 'start') {
+    <label
+      [for]="label()"
+      class="text-lg cursor-pointer font-semibold flex items-center gap-1 {{ labelClass() }}"
+    >
+      @if (icon()) {
+        <span [innerHTML]="icon()"></span>
+      }
+      {{ label() }}
+      <span class="text-red-600">*</span>
+    </label>
+  }
+  <div>
+    @if (type() == 'checkbox') {
+      <input
+        type="checkbox"
+        class="w-6 h-6 accent-green-700 dark:accent-green-500 rounded-xl checked:appearance-auto bg-surface-input focus:bg-surface focus:ring-3 focus:ring-brand/20 transition-all duration-200 outline-none px-3.5 {{
+          inputClass()
+        }}"
+        [disabled]="disabled"
+        [id]="generateId(label())"
+        [checked]="value()"
+        (ngModelChange)="onCheckboxChange($event)"
+        (blur)="onTouched()"
+      />
+    } @else if (
+      type() == 'text' ||
+      type() == 'email' ||
+      type() == 'number' ||
+      type() == 'password' ||
+      type() == 'url' ||
+      type() == 'date'
+    ) {
+      <input
+        [type]="type()"
+        class="w-full h-10 bg-surface-input focus:bg-surface focus:ring-3 focus:ring-brand/20 transition-all duration-200 rounded-xl px-3 py-2 text-xl outline-none placeholder:text-text-faint {{
+          inputClass()
+        }}
+        "
+        [readOnly]="readonly()"
+        [placeholder]="type() == 'password' ? '***********': (placeholder() ?? label())"
+        [id]="generateId(label())"
+        [autocomplete]="label()"
+        [attr.pattern]="type() == 'url' ?
+        'https?:\/\/(www\.)?[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}(\/[^\s]*)?'
+        :''"
+        [disabled]="disabled"
+        [ngModel]="value()"
+        (ngModelChange)="onInputChange($event)"
+        (blur)="onTouched()"
+      />
+    } @else if (type() == 'textarea') {
+      <textarea
+        class="w-full h-20 bg-surface-input focus:bg-surface focus:ring-3 focus:ring-brand/20 transition-all duration-200 rounded-xl px-3 py-2 text-xl outline-none placeholder:text-text-faint {{
+          inputClass()
+        }}"
+        [placeholder]="placeholder() ?? label()"
+        [id]="generateId(label())"
+  [readOnly]="readonly()"
+        [disabled]="disabled"
+        [ngModel]="value()"
+        (ngModelChange)="onInputChange($event)"
+        (blur)="onTouched()"
+      ></textarea>
+    }
+  </div>
+  @if (showLable() && labelPosition() == 'end') {
+    <label
+      for="hello"
+      class="text-lg cursor-pointer font-semibold flex items-center gap-1  {{ labelClass() }}"
+    >
+      @if (icon()) {
+        <span [innerHTML]="icon()"></span>
+      }
+      {{ label() }}
+      <span class="text-red-600">*</span>
+    </label>
+  }
+  <!-- Error MEssage -->
+  @if (errorMessage()) {
+    <div
+      class="text-sm text-red-600 {{ errorMessage() ? 'block' : 'hidden' }} {{
+        errorMEssageClass()
+      }}"
+    >
+      {{ errorMessage() }}
+    </div>
+  }
+</div>
