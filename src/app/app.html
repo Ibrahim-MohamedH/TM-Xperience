@@ -1,12 +1,8 @@
-<form [formGroup]="form" (submit)="onSubmit()">
-  <tf-input
-label="email address"
-formControlName="email"
-[icon]="appService.getIcon('envelopeSoild')"></tf-input>
-
-<tf-input
-type="password"
-label="password"
-formControlName="password"></tf-input>
-<button>submit</button>
-</form>
+<tf-button
+type="button"
+label="This is a button"
+[loading]="false" 
+iconPosition="end"
+icon="eye"
+loadingText="Loading..."
+></tf-button>
