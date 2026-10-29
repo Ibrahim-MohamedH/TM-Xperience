@@ -1,0 +1,24 @@
+<main class="min-h-dvh">
+  <header
+    class="h-18 bg-surface/75 backdrop-blur-md backdrop-saturate-50 border-b border-border flex justify-between items-center gap-3 p-4 lg:px-6"
+  >
+    <h1 class="text-base lg:text-lg font-bold tracking-tight">Tasky-flow</h1>
+    <div class="flex items-center gap-1.5">
+      <button
+        (click)="language.toggleLangage()"
+        class="w-9 h-9 rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-2 transition-colors overflow-hidden"
+      >
+        {{ language.currentLang() == 'AR' ? 'EN' : 'AR' }}
+      </button>
+      <button
+        (click)="theme.toggleDarkMode()"
+        class="w-9 h-9 rounded-lg flex items-center justify-center cursor-pointer hover:bg-surface-2 transition-colors overflow-hidden"
+      >
+        {{ theme.isDark() ? '☀️' : '🌙' }}
+      </button>
+    </div>
+  </header>
+  <div class="p-7 flex justify-center items-center">
+    <router-outlet></router-outlet>
+  </div>
+</main>
